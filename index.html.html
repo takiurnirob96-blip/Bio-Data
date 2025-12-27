@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marriage Bio-Data - Md Takiur Rahman</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .profile-photo-container {
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .profile-photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .profile-photo:hover {
+            transform: scale(1.05);
+        }
+
+        .upload-placeholder {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            border: 3px dashed rgba(255,255,255,0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-placeholder:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: white;
+        }
+
+        .upload-placeholder svg {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 10px;
+        }
+
+        .upload-placeholder span {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        #photoInput {
+            display: none;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        .section {
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            color: #667eea;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .info-item {
+            padding: 12px;
+            background: #f8f9ff;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #555;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            color: #333;
+            font-size: 1em;
+        }
+
+        .education-item, .work-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9ff;
+            border-radius: 8px;
+            border-left: 3px solid #764ba2;
+        }
+
+        .education-item h4, .work-item h4 {
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .share-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: transform 0.2s;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .share-btn:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="profile-photo-container">
+                <div class="upload-placeholder" id="uploadArea" onclick="document.getElementById('photoInput').click()">
+                    <svg fill="white" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                    <span>Click to upload photo</span>
+                </div>
+                <img id="profilePhoto" class="profile-photo" style="display: none;" alt="Profile Photo">
+                <input type="file" id="photoInput" accept="image/*">
+            </div>
+            <h1>Md Takiur Rahman</h1>
+            <p>Marriage Bio-Data</p>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2 class="section-title">Personal Information</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Full Name</div>
+                        <div class="info-value">Md Takiur Rahman</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Date of Birth</div>
+                        <div class="info-value">December 12, 1997</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Age</div>
+                        <div class="info-value">27 years</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Height</div>
+                        <div class="info-value">5'7"</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Religion</div>
+                        <div class="info-value">Islam</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Permanent Address</div>
+                        <div class="info-value">373 Purba Adalat Para, Tangail, Bangladesh</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Current Address</div>
+                        <div class="info-value">Ontario, Canada</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Family Background</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Father's Name</div>
+                        <div class="info-value">Md Mizanur Rahman</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Father's Education</div>
+                        <div class="info-value">MSc - Sadat College</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Father's Profession</div>
+                        <div class="info-value">Private Service (Orion Infusion Ltd)</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Mother's Name</div>
+                        <div class="info-value">Nazma Chowdhury</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Mother's Profession</div>
+                        <div class="info-value">Housewife</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Educational Qualifications</h2>
+                <div class="education-item">
+                    <h4>Post Graduate Diploma (PGD)</h4>
+                    <p>George Brown College, Canada - 2025</p>
+                </div>
+                <div class="education-item">
+                    <h4>Bachelor of Business Administration (BBA)</h4>
+                    <p>North South University, Bangladesh - 2021</p>
+                </div>
+                <div class="education-item">
+                    <h4>Higher Secondary Certificate (HSC)</h4>
+                    <p>Dhaka City College - 2015</p>
+                </div>
+                <div class="education-item">
+                    <h4>Secondary School Certificate (SSC)</h4>
+                    <p>Shamsul Haque Khan School & College - 2013</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Professional Experience</h2>
+                <div class="work-item">
+                    <h4>Customer Service Representative (CSR)</h4>
+                    <p>Domino's Pizza, Canada</p>
+                </div>
+                <div class="work-item">
+                    <h4>Cook</h4>
+                    <p>Libretto Pizza, Canada</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Hobbies & Interests</h2>
+                <div class="info-item">
+                    <div class="info-value">Traveling, Reading, Cooking, Sports, Photography</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Partner Preferences</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Age Range</div>
+                        <div class="info-value">22-28 years</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Education</div>
+                        <div class="info-value">Graduate or above</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Profession</div>
+                        <div class="info-value">Any respectable profession</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Location</div>
+                        <div class="info-value">Canada or Bangladesh</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Values</div>
+                        <div class="info-value">Family-oriented, respectful, educated</div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="share-btn" onclick="shareProfile()">📤 Share This Profile</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">Link copied to clipboard!</div>
+
+    <script>
+        // Handle photo upload
+        const photoInput = document.getElementById('photoInput');
+        const profilePhoto = document.getElementById('profilePhoto');
+        const uploadArea = document.getElementById('uploadArea');
+
+        photoInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profilePhoto.src = e.target.result;
+                    profilePhoto.style.display = 'block';
+                    uploadArea.style.display = 'none';
+                    
+                    // Store in localStorage
+                    localStorage.setItem('profilePhoto', e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Load saved photo on page load
+        window.addEventListener('load', function() {
+            const savedPhoto = localStorage.getItem('profilePhoto');
+            if (savedPhoto) {
+                profilePhoto.src = savedPhoto;
+                profilePhoto.style.display = 'block';
+                uploadArea.style.display = 'none';
+            }
+        });
+
+        // Allow clicking on photo to change it
+        profilePhoto.addEventListener('click', function() {
+            photoInput.click();
+        });
+
+        function shareProfile() {
+            const url = window.location.href;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Marriage Bio-Data - Md Takiur Rahman',
+                    text: 'View marriage bio-data of Md Takiur Rahman',
+                    url: url
+                }).catch(err => {
+                    copyToClipboard(url);
+                });
+            } else {
+                copyToClipboard(url);
+            }
+        }
+
+        function copyToClipboard(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast();
+                });
+            } else {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast();
+            }
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
